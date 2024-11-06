@@ -1,0 +1,20 @@
+TITLE: A place to try out <DSLE> experiments
+  
+MODULE-INPUTS:
+
+VARS:
+  input_string_list: LIST STRING
+  sliced_string_list: LIST STRING
+
+RULES:  
+  - NAME: Set input list
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: input_string_list
+      VALUE: <DSLE> ["foo", "bar", "baz", "potato", "orange"] </DSLE>  
+  - NAME: Slice input list
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: sliced_string_list
+      VALUE: <DSLE> input_string_list[2:4] </DSLE>
+

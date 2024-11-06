@@ -1,0 +1,39 @@
+TITLE: Illustrate SET-OBJECT with an expression in the PATH
+  
+MODULE-INPUTS:
+
+VARS:
+  a_person: JSON
+  replacement_names: JSON
+  my_loop_count: INT
+
+RULES: 
+  - NAME: set_and_mutate_a_json_variable_using_expr_with_a_variable_for_a_list_index_in_path
+    ACTION: DO-MULTIPLE-ACTIONS
+    ACTION-PARAMS:
+      DO:
+      - ACTION: SET-VARIABLE
+        NAME: myactionname
+        ACTION-PARAMS:
+          VARIABLE-NAME: a_person
+          VALUE: |
+            <DSLE> {"name":{"first":"Janet","last":"Prichard"},"age":47, "knows": ["mary", "jane", "laura"]} </DSLE>
+      - ACTION: SET-VARIABLE
+        NAME: myactionname
+        ACTION-PARAMS:
+          VARIABLE-NAME: replacement_names
+          VALUE: <DSLE> ["fred", "joe", "graham"] </DSLE>
+      - ACTION: LOOP-NTIMES
+        NAME: myactionname
+        ACTION-PARAMS:
+          NUMBER-OF-TIMES: 3
+          LOOP-COUNT-VARIABLE: my_loop_count
+          DO:
+          - ACTION: SET-OBJECT
+            NAME: myactionname
+            ACTION-PARAMS:
+              VARIABLE-NAME: a_person
+              PATH-LIST:
+              - PATH: <DSLE> "knows." + my_loop_count </DSLE>
+                VALUE: <DSLE> replacement_names[my_loop_count] </DSLE>
+    

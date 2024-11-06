@@ -1,0 +1,68 @@
+TITLE: Using expression with different types of quoting or escaping.
+
+# This shows:
+# - How to use raw values and expressions in yaml script
+  
+MODULE-INPUTS:
+
+VARS:
+  jsonVar: JSON
+  strVar: STRING
+  intVar: INT
+  floatVar: FLOAT
+  boolVar: BOOL
+
+RULES: 
+  # JSON vars
+  - NAME: a1
+    ACTION: SET-VARIABLE  
+    ACTION-PARAMS:
+      VARIABLE-NAME: jsonVar
+      VALUE: | # Set json from an expression with a json object.
+        <DSLE>{"my_car": "Ford"}</DSLE>
+  - NAME: a2
+    ACTION: SET-VARIABLE  
+    ACTION-PARAMS:
+      VARIABLE-NAME: jsonVar
+      VALUE: '{"my_car": "Ford"}' # Set json from a valid json string.
+
+  # Values can be set by expressions
+  - NAME: b1
+    ACTION: SET-VARIABLE  
+    ACTION-PARAMS:
+      VARIABLE-NAME: intVar
+      VALUE: <DSLE>42</DSLE> # This is a valid script with an int.
+  - NAME: b2
+    ACTION: SET-VARIABLE  
+    ACTION-PARAMS:
+      VARIABLE-NAME: floatVar
+      VALUE: <DSLE>42.5</DSLE> # This is a valid script with a float.
+  - NAME: b3
+    ACTION: SET-VARIABLE  
+    ACTION-PARAMS:
+      VARIABLE-NAME: boolVar
+      VALUE: <DSLE>true</DSLE> # This is a valid script with a bool.
+  - NAME: b4
+    ACTION: SET-VARIABLE  
+    ACTION-PARAMS:
+      VARIABLE-NAME: strVar
+      VALUE: <DSLE>"test"</DSLE> # This is a valid script with a quoted string.
+
+  # Values can be set directly.
+  - NAME: a5
+    ACTION: SET-VARIABLE  
+    ACTION-PARAMS:
+      VARIABLE-NAME: intVar
+      VALUE: 42
+  - NAME: a6
+    ACTION: SET-VARIABLE  
+    ACTION-PARAMS:
+      VARIABLE-NAME: floatVar
+      VALUE: 42.5
+  - NAME: a7
+    ACTION: SET-VARIABLE  
+    ACTION-PARAMS:
+      VARIABLE-NAME: boolVar
+      VALUE: true
+
+  

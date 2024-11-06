@@ -1,0 +1,42 @@
+TITLE: Illustrate JSON filtering
+  
+MODULE-INPUTS:
+
+VARS:
+  input_json_map: JSON
+  input_json_list: JSON
+
+  filtered_json_map: INT
+  filtered_json_list: INT
+  
+RULES:  
+  - NAME: demonstrate filtering JSON variable
+    ACTION: DO-MULTIPLE-ACTIONS
+    ACTION-PARAMS:
+      DO:
+      - ACTION: SET-VARIABLE
+        NAME: myactionname
+        ACTION-PARAMS:
+          VARIABLE-NAME: input_json_map
+          VALUE: |
+            <DSLE> {"foo": 41, "bar": 42} </DSLE>
+      
+      - ACTION: SET-VARIABLE
+        NAME: myactionname
+        ACTION-PARAMS:
+          VARIABLE-NAME: input_json_list
+          VALUE: <DSLE> [41, 42] </DSLE>
+    
+      - ACTION: SET-VARIABLE
+        NAME: myactionname
+        ACTION-PARAMS:
+          VARIABLE-NAME: filtered_json_map
+          VALUE: <DSLE> json_query(input_json_map, "bar") </DSLE>
+
+      - ACTION: SET-VARIABLE
+        NAME: myactionname
+        ACTION-PARAMS:
+          VARIABLE-NAME: filtered_json_list
+          VALUE: <DSLE> json_query(input_json_list, "[1]") </DSLE>
+      
+          

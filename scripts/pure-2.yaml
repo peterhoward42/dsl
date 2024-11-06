@@ -1,0 +1,39 @@
+TITLE: pure-fa SET-OBJECT proposal
+
+# This shows:
+# - SET-OBJECT building a playbook_input JSON variable derived from a loop
+#   over a list of server objects similar to that derived from
+#   a database query.
+  
+MODULE-INPUTS:
+
+VARS:
+  servers_from_db: JSON
+  server_idx: INT
+  server: JSON
+  playbook_input: JSON
+
+RULES: 
+  - NAME: rule1
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: servers_from_db
+      VALUE: |
+        <DSLE> [{"fqdn": "fqdn1", "wwn": "wwn1"}, {"fqdn": "fqdn2", "wwn": "wwn2"}] </DSLE>
+
+  - NAME: rule2
+    ACTION: LOOP-OVER-LIST
+    ACTION-PARAMS:
+      INPUT-LIST: <DSLE> servers_from_db </DSLE>
+      LOOP-COUNT-VARIABLE: server_idx
+      LOOP-ELEMENT-VARIABLE: server
+      DO:
+      - ACTION: SET-OBJECT
+        NAME: myactionname
+        ACTION-PARAMS:
+            VARIABLE-NAME: playbook_input
+            PATH-LIST:
+            - PATH: <DSLE> "hosts." + server_idx </DSLE>
+              VALUE: |
+                <DSLE> { "fqdn": server.fqdn, "wwn": server.wwn } </DSLE>
+  

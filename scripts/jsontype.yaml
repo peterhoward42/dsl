@@ -1,0 +1,50 @@
+TITLE: Illustrate JSON type
+  
+MODULE-INPUTS:
+  some_integer: INT
+  a_json_user_input: JSON
+
+VARS:
+  some_json: JSON
+  a_car: STRING
+  some_more_json: JSON
+  uses_json_userinput: JSON
+
+RULES:  
+  - NAME: use-json-literal-in-expression
+    ACTION: DO-MULTIPLE-ACTIONS
+    ACTION-PARAMS:
+      DO:
+      - ACTION: SET-VARIABLE
+        NAME: myactionname
+        ACTION-PARAMS:
+          VARIABLE-NAME: some_json
+          VALUE: |
+            <DSLE> {"my_car": "Ford"} </DSLE>
+      - ACTION: SET-VARIABLE
+        NAME: myactionname
+        ACTION-PARAMS:
+          VARIABLE-NAME: a_car
+          VALUE: <DSLE> some_json.my_car </DSLE>
+      - ACTION: SET-VARIABLE
+        NAME: myactionname
+        ACTION-PARAMS:
+          VARIABLE-NAME: some_more_json
+          VALUE: |
+            <DSLE> {"my_car": a_car + "extra"} </DSLE>
+      - ACTION: SET-VARIABLE
+        NAME: myactionname
+        ACTION-PARAMS:
+          VARIABLE-NAME: some_more_json
+          VALUE: |
+            <DSLE> {"my_car": some_more_json.my_car + "extra"} </DSLE>
+  - NAME: use-json-user-input-in-expression
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: uses_json_userinput
+      # Note this expression uses dotted notation to index into
+      # a_json_user_input - which is a JSON typed user input - NOT
+      # a variable.
+      VALUE: <DSLE> a_json_user_input.foo </DSLE>
+
+          

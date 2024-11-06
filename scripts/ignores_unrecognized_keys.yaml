@@ -1,0 +1,20 @@
+TITLE: Illustrate that DSL ignores keys it does not recognize.
+
+THIS-KEY-IS-ARBITRARY:
+  this_could_be_anything: 42
+
+MODULE-INPUTS:
+
+VARS:
+  growing_string: STRING
+
+RULES:
+  - NAME: do-multiple-actions
+    ACTION: DO-MULTIPLE-ACTIONS
+    ACTION-PARAMS:
+      DO:
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: growing_string
+            VALUE: "abcdef"

@@ -1,0 +1,64 @@
+TITLE: Illustrate CONDITIONAL ACTION
+
+MODULE-INPUTS:
+  some_integer: INT
+
+VARS:
+  result: INT
+  result2: STRING
+
+RULES:
+  - NAME: conditional-example
+    ACTION: CONDITIONAL
+    ACTION-PARAMS:
+      CASES:
+        - IF: <DSLE> some_integer == 4 </DSLE>
+          DO:
+            - ACTION: SET-VARIABLE
+              NAME: firstCase
+              ACTION-PARAMS:
+                VARIABLE-NAME: result
+                VALUE: <DSLE> 4 </DSLE>
+
+        - IF: <DSLE> some_integer == 3 </DSLE>
+          DO:
+            - ACTION: SET-VARIABLE
+              NAME: secondCase
+              ACTION-PARAMS:
+                VARIABLE-NAME: result
+                VALUE: <DSLE> 3 </DSLE>
+
+        - IF: <DSLE> some_integer == 2 </DSLE>
+          DO:
+            - ACTION: SET-VARIABLE
+              NAME: thirdCase
+              ACTION-PARAMS:
+                VARIABLE-NAME: result
+                VALUE: <DSLE> 2 </DSLE>
+
+        - IF: <DSLE> some_integer == 1 </DSLE>
+          DO:
+            - ACTION: SET-VARIABLE
+              NAME: fourthCase
+              ACTION-PARAMS:
+                VARIABLE-NAME: result
+                VALUE: <DSLE> 1 </DSLE>
+
+  - NAME: conditional-example2
+    ACTION: CONDITIONAL
+    ACTION-PARAMS:
+      CASES:
+        - IF: true
+          DO:
+            - ACTION: SET-VARIABLE
+              NAME: fifthCase
+              ACTION-PARAMS:
+                VARIABLE-NAME: result2
+                VALUE: ok
+        - IF: false
+          DO:
+            - ACTION: SET-VARIABLE
+              NAME: sixthCase
+              ACTION-PARAMS:
+                VARIABLE-NAME: result2
+                VALUE: notok

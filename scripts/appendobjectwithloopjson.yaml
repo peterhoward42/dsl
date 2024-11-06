@@ -1,0 +1,31 @@
+TITLE: Test custom AppendObject function used within a loop
+
+MODULE-INPUTS:
+  loopCount: INT
+
+VARS:
+  loopIdx: INT
+  appendObjResult: JSON
+  finalSize: INT
+
+RULES:
+
+  - NAME: loop
+    ACTION: LOOP-NTIMES
+    ACTION-PARAMS:
+      NUMBER-OF-TIMES: <DSLE> loopCount </DSLE>
+      LOOP-COUNT-VARIABLE: loopIdx
+      DO:
+        - NAME: append
+          ACTION: SET-VARIABLE
+          ACTION-PARAMS:
+            VARIABLE-NAME: appendObjResult
+            VALUE: |
+              <DSLE> AppendObject(appendObjResult, {"age": loopIdx+1}) </DSLE>
+
+  - NAME: set size
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: finalSize
+      VALUE: |
+        <DSLE> len(appendObjResult) </DSLE>

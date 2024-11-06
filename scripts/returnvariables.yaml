@@ -1,0 +1,30 @@
+TITLE: Illustrate JSON type
+  
+MODULE-INPUTS:
+
+VARS:
+  an_int: INT
+  a_string: STRING
+  some_json: JSON
+
+RULES:  
+  - NAME: illustrate the DSL returning variables from API call
+    ACTION: DO-MULTIPLE-ACTIONS
+    ACTION-PARAMS:
+      DO:
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: an_int
+            VALUE: 42
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: a_string
+            VALUE: hello
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: some_json
+            VALUE: |
+              <DSLE> {"foo": "apple", "bar":99} </DSLE>

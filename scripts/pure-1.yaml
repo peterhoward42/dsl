@@ -1,0 +1,28 @@
+TITLE: pure-fa SET-OBJECT proposal
+
+# This shows:
+# - Adding an int to a string -> "hosts." + server_count
+# - SET-OBJECT value being a compound object -> { "name": "fred", "wwn": 42 }
+  
+MODULE-INPUTS:
+
+VARS:
+  playbook_input: JSON
+  server_count: INT
+
+RULES: 
+  - NAME: unused
+    ACTION: LOOP-NTIMES
+    ACTION-PARAMS:
+      NUMBER-OF-TIMES: 2
+      LOOP-COUNT-VARIABLE: server_count
+      DO:
+      - ACTION: SET-OBJECT
+        NAME: myactionname
+        ACTION-PARAMS:
+          VARIABLE-NAME: playbook_input
+          PATH-LIST:
+          - PATH: <DSLE> "hosts." + server_count </DSLE>
+            VALUE: |
+              <DSLE> { "name": "fred", "wwn": 42 } </DSLE>
+  

@@ -1,0 +1,35 @@
+TITLE: Illustrate LIST types
+
+MODULE-INPUTS:
+  unused: STRING
+  # Make you can lists in the input.
+  alist: LIST INT
+
+VARS:
+  list_of_words: LIST STRING
+  copied_words: LIST STRING
+  filtered_words: LIST STRING
+  derived_from_user_input_list: INT
+
+RULES:
+  - NAME: create-list-of-words
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: list_of_words
+      VALUE: <DSLE> ['foo', 'bar', 'baz'] </DSLE>
+  - NAME: copy-list-of-words
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: copied_words
+      VALUE: <DSLE> list_of_words </DSLE>
+  - NAME: filter-list-of-words
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: filtered_words
+      VALUE: <DSLE> filter(list_of_words, {# startsWith 'b'}) </DSLE>
+  - NAME: use-user-input-list-in-expression
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: derived_from_user_input_list
+      VALUE: <DSLE> alist[0] </DSLE>
+    

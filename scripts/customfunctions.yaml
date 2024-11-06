@@ -1,0 +1,245 @@
+TITLE: Illustrate and *Document* every custom function available to DSL expressions.
+
+MODULE-INPUTS:
+
+
+VARS:
+  truncated: STRING
+  toUpper: STRING
+  toLower: STRING
+  padNum: STRING
+  highestNum: INT
+  volList: LIST STRING
+  segments: STRING
+  splittedList: LIST STRING
+  add: STRING
+  newStringSlice: LIST STRING
+  originalStringSlice: LIST STRING
+  newIntSlice: LIST INT
+  originalIntSlice: LIST INT
+  lessThan: BOOL
+  lessThanEq: BOOL
+  greaterThan: BOOL
+  greaterThanEq: BOOL
+  currentDateTime: STRING
+  adjustedDateTime: STRING
+  toString: STRING
+  toInt: INT  
+  toFloat64: FLOAT
+  uniquedStrings: LIST STRING
+  floor: INT 
+  ceil: INT 
+  round: INT
+  appendObjResult: JSON
+  myListVariable: JSON
+  myObjectVariable: JSON
+  substitutedString: STRING
+  substitutedStringRegex: STRING
+
+RULES:
+
+  - NAME: Document Truncate100()
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: truncated
+      VALUE: <DSLE> Truncate100("hello world") </DSLE>
+
+  - NAME: Document ToUpper()
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: toUpper
+      VALUE: <DSLE> ToUpper("hello world") </DSLE>
+
+  - NAME: Document ToLower()
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: toLower
+      VALUE: <DSLE> ToLower("HELLO WORLD") </DSLE>
+
+  - NAME: Document PadNumber()
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: padNum
+      VALUE: <DSLE> PadNumber(10, 3) </DSLE>
+
+  - NAME: Set Highest Number List variable
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: volList
+      VALUE: <DSLE> ['vol1_001_v', 'vol2_002_v'] </DSLE>
+  - NAME: Document GetHighestNumber()
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: highestNum
+      VALUE: <DSLE> GetHighestNumber(volList, "^\\w.+_(\\d{3,4})_v$") </DSLE>
+
+  - NAME: Document SplitOnDelimiter()
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: segments
+      VALUE: <DSLE> SplitOnDelimiter("split,this,line", ",", 1) </DSLE>
+
+  - NAME: Document Split()
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: splittedList
+      VALUE: <DSLE> Split("split,this,line", ",") </DSLE>
+
+  - NAME: Document AppendString() Original Slice
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: originalStringSlice
+      VALUE: <DSLE> ['old-value'] </DSLE>
+  - NAME: Document AppendString()
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: newStringSlice
+      VALUE: <DSLE> AppendString(originalStringSlice, 'new-value') </DSLE>
+
+  - NAME: Document AppendInt() Original Slice
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: originalIntSlice
+      VALUE: <DSLE> [1] </DSLE>
+
+  - NAME: Document AppendInt()
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: newIntSlice
+      VALUE: <DSLE> AppendInt(originalIntSlice, 2) </DSLE>
+  
+    # AppendObject takes an arbitrary number of arguments that we'll call "items".
+    # These arguments can be of any, and varying types. E.g. objects, lists, integers, strings etc.
+    # It concatenates the items into a JSON list which is good for assigning to DSL JSON variables, or
+    # being used as-is in DSLE expressions.
+    #
+    # If any of the items are lists in of themselves, then their constituent items are
+    # added invidividually; i.e. they are flattened.
+    #
+    # If any of the items can be interpreted as empty - we ignore them.
+    #
+  - NAME: Document AppendObj() 
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: appendObjResult
+      # Note we are passing in 6 arguments of varying types.
+      VALUE: |
+        <DSLE> AppendObject({"age": 99}, [{"foo": 42}, {"bar": 43}], 44, [false, false, true], "hello") </DSLE>
+
+  - NAME: Document LessThan()
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: lessThan
+      VALUE: <DSLE> LessThan("axxx", "bxxx") </DSLE>
+
+  - NAME: Document LessThanEq()
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: lessThanEq
+      VALUE: <DSLE> LessThan("axxx", "bxxx") </DSLE>
+      
+  - NAME: Document GreaterThan()
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: greaterThan
+      VALUE: <DSLE> GreaterThanEq("bxxx", "axxx") </DSLE>
+      
+  - NAME: Document GreaterThanEq()
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: greaterThanEq
+      VALUE: <DSLE> GreaterThanEq("bxxx", "axxx") </DSLE>
+  
+  - NAME: Document GetCurrentDateTimeUTC()
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: currentDateTime
+      VALUE: <DSLE> GetCurrentDateTimeUTC() </DSLE>
+
+  - NAME: Document AdjustDateTimeUTC()
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: adjustedDateTime
+      VALUE: <DSLE> AdjustDateTimeUTC(2) </DSLE>          
+
+## ToString will work on any of {string, float, bool, int} and it attempts
+## to produce an string interpretation.
+## If you call it with any other type, or an unconvertable value, it will return -1. (We know
+## that -1 is not a good choice to signal
+## errors for this function - but it is the best we can do until we introduce
+## proper error return values)      
+  - NAME: Document ToString()
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: toString
+      VALUE: <DSLE> ToString(143) </DSLE>      
+
+## ToInt will work on any of {string, float, bool, int} and it attempts
+## to produce an integer interpretation.
+## The float conversion truncates. If you call it with any
+## other type, or an unconvertable value, it will return -1. (We know
+## that -1 is not a good choice to signal
+## errors for this function - but it is the best we can do until we introduce
+## proper error return values)
+  - NAME: Document ToInt()
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: toInt
+      VALUE: <DSLE> ToInt("143") </DSLE>     
+
+## ToFloat64 will work on any of {string, float, int} and it attempts
+## to produce an float64 interpretation.
+## If you call it with any other type, or an unconvertable value, it will return -1. (We know
+## that -1 is not a good choice to signal
+## errors for this function - but it is the best we can do until we introduce
+## proper error return values)      
+  - NAME: Document ToFloat64(toFloat64)
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: toFloat64
+      VALUE: <DSLE> ToFloat64("143") </DSLE>       
+
+## Ceil returns the least integer value greater than or equal to input value.
+  - NAME: Document Ceil(ceil)
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: ceil
+      VALUE: <DSLE> Ceil(1.6) </DSLE>           
+
+## Floor returns the greatest integer value less than or equal to input value.
+  - NAME: Document Floor(floor)
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: floor
+      VALUE: <DSLE> Floor(1.6) </DSLE>   
+      
+
+## Round returns the nearest integer, rounding half away from zero.
+  - NAME: Document Round(round)
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: round
+      VALUE: <DSLE> Round(1.6) </DSLE>   
+      
+  - NAME: Document UniqueStrings
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: uniquedStrings
+      # Note you can pass in any number of arguments, and they can be of any type.
+      # The UniqueStrings function ignores arguments unless they are single strings
+      # of slices strings.
+      VALUE: <DSLE> UniqueStrings(42, 'GB', ['GB','UK','GB','US'], 43, 45, "FR") </DSLE>
+
+  - NAME: Document StringSub
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: substitutedString
+      VALUE: <DSLE> StringSub("foo QQQ bar QQQ baz", "QQQ", "EEE") </DSLE>
+
+  - NAME: Document StringSubRegex
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: substitutedStringRegex
+      VALUE: <DSLE> StringSubRegex("foo ping bar bing baz", ".ing\\s*", "EEE") </DSLE>
+
+        

@@ -1,0 +1,30 @@
+TITLE: Illustrate JSON type
+  
+MODULE-INPUTS:
+   set_int: INT
+   ternary_input: INT
+
+
+VARS:
+  an_int: INT  # result to save
+  ternary_result: INT
+
+RULES:  
+  - NAME: illustrate the DSL returning variables from API call
+    ACTION: DO-MULTIPLE-ACTIONS
+    ACTION-PARAMS:
+      DO:
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: an_int
+            VALUE: <DSLE> set_int + 1 </DSLE>
+
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: ternary_result
+            VALUE: |
+              <DSLE> ternary_input == nil? 42: 43 </DSLE>
+        
+        

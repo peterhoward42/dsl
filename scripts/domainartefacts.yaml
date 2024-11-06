@@ -1,0 +1,75 @@
+TITLE: Illustrates DOMAIN artefact
+
+MODULE-INPUTS:
+
+VARS:
+  get_result: JSON DOMAIN-ARTEFACT
+  create_result: JSON DOMAIN-ARTEFACT
+  update_result: JSON DOMAIN-ARTEFACT  
+
+RULES:
+  - NAME: domain-artefact
+    ACTION: DO-MULTIPLE-ACTIONS
+    ACTION-PARAMS:
+      DO:
+        - ACTION: GET-DOMAIN-ARTEFACT
+          NAME: myactionname
+          ACTION-PARAMS:
+            DATA-MODEL: "my-data-model"
+            DOMAIN-ARTEFACT: "Volume"
+            ID: "1234"
+            VARIABLE-FOR-RESULTS: "get_result"
+            LATEST: true
+
+        - ACTION: CREATE-DOMAIN-ARTEFACT
+          NAME: myactionname
+          ACTION-PARAMS:
+            DATA-MODEL: "my-data-model"
+            DOMAIN-ARTEFACT: "Volume"
+            VARIABLE-FOR-RESULTS: create_result
+            DOMAIN-PAYLOAD:
+              - KEY: "myKey"
+                VALUE: "fibble"
+              - KEY: "anotherKey"
+                VALUE: "fabble"
+              - KEY: "nullKey"
+                VALUE: null
+              - KEY: "numKey"
+                VALUE: 123
+              - KEY: "boolKey"
+                VALUE: true
+              - KEY: "emptyString"
+                VALUE: ""
+              - KEY: "nullKeyD"
+                VALUE: <DSLE> null </DSLE>
+              - KEY: "numKeyD"
+                VALUE: <DSLE> 123 </DSLE>
+              - KEY: "boolKeyD"
+                VALUE: <DSLE> true </DSLE>
+              - KEY: "emptyStringD"
+                VALUE: <DSLE> "" </DSLE>
+
+        - ACTION: UPDATE-DOMAIN-ARTEFACT
+          NAME: myactionname
+          ACTION-PARAMS:
+            DATA-MODEL: "my-data-model"
+            DOMAIN-ARTEFACT: "Volume"
+            ID: <DSLE>"1234"</DSLE>
+            VARIABLE-FOR-RESULTS: "update_result"
+            DOMAIN-PAYLOAD:  # Remove 
+              - KEY: "myKey"
+                VALUE: "fobble"
+
+        - ACTION: DELETE-DOMAIN-ARTEFACT
+          NAME: myactionname
+          ACTION-PARAMS:
+            DATA-MODEL: "my-data-model"
+            DOMAIN-ARTEFACT: "Volume"
+            ID: "1234"
+
+        - ACTION: USE-DOMAIN-ARTEFACT
+          NAME: myactionname
+          ACTION-PARAMS:
+            DATA-MODEL: "my-data-model"
+            DOMAIN-ARTEFACT: "Volume"
+            ID: "1234"

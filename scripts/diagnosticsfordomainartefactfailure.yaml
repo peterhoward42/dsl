@@ -1,0 +1,31 @@
+TITLE: Illustrate diagnostics for a CREATE-DOMAIN-ARTEFACT Action that hits an internal error.
+
+
+# The test code that uses this YAML creates a situation in which a CREATE-DOMAIN-ARTEFACT receives an error
+# response from the (fake) infradata service.
+
+MODULE-INPUTS:
+
+VARS:
+  my_var: INT
+  result: JSON
+
+RULES:
+  -  ACTION: SET-VARIABLE
+     NAME: setVariableBeforeError
+     ACTION-PARAMS:
+        VARIABLE-NAME: my_var
+        VALUE: 123
+
+  -  ACTION: USE-DOMAIN-ARTEFACT
+     NAME: usingDomainArtefact
+     ACTION-PARAMS:
+       DATA-MODEL: "my-data-model"
+       DOMAIN-ARTEFACT: "Volume"
+       ID: "id_abcxyz"
+
+  -  ACTION: SET-VARIABLE
+     NAME: setVariableAfterError
+     ACTION-PARAMS:
+        VARIABLE-NAME: my_var
+        VALUE: 456

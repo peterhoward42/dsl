@@ -1,0 +1,15 @@
+TITLE: Illustrate the built-in context variable.
+
+MODULE-INPUTS:
+
+ 
+VARS:
+  some_number: INT
+  correlation_id: STRING
+
+RULES:
+  - NAME: Use a field from the context bult in variable in an expression
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: correlation_id
+      VALUE: <DSLE> context.CorrelationId </DSLE>

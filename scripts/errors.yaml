@@ -1,0 +1,26 @@
+TITLE: Illustrate how to raise errors
+  
+MODULE-INPUTS:
+  some_integer: INT
+
+VARS:
+  the_variable: INT
+
+RULES:  
+  - NAME: Before Error
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: the_variable
+      VALUE: 1
+
+  - NAME: Raise the Error
+    ACTION: ERROR
+    ACTION-PARAMS:
+      MESSAGE: This expression carries the error details # You can use DSLE expressions here.
+   
+  - NAME: After Error
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: the_variable
+      VALUE: 2
+

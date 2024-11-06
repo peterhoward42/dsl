@@ -1,0 +1,98 @@
+TITLE: Illustrate LOOP-OVER-LIST ACTION
+
+MODULE-INPUTS:
+
+
+VARS:
+  input_list: LIST FLOAT
+  list_of_squares: LIST FLOAT
+
+  input_list2: LIST FLOAT
+  output_list2: LIST FLOAT
+
+  my_loop_count: INT
+  my_loop_element: FLOAT
+
+  test_var_break: FLOAT
+  test_var_continue: STRING
+
+RULES:
+  - NAME: make-input-list
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: input_list
+      VALUE: <DSLE> [3.0, 4.0, 5.0] </DSLE>
+
+  - NAME: make-squared-list
+    ACTION: LOOP-OVER-LIST
+    ACTION-PARAMS:
+      INPUT-LIST: <DSLE> input_list </DSLE>
+      LOOP-COUNT-VARIABLE: my_loop_count
+      LOOP-ELEMENT-VARIABLE: my_loop_element
+      DO:
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: list_of_squares
+            VALUE: <DSLE> AppendFloat(list_of_squares, my_loop_element ** 2) </DSLE>
+
+  - NAME: loop-over-empty-list
+    ACTION: LOOP-OVER-LIST
+    ACTION-PARAMS:
+      INPUT-LIST: <DSLE> input_list2 </DSLE>
+      LOOP-COUNT-VARIABLE: my_loop_count
+      LOOP-ELEMENT-VARIABLE: my_loop_element
+      DO:
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: output_list2
+            VALUE: <DSLE> AppendFloat(output_list2, my_loop_element ** 2) </DSLE>
+
+  - NAME: loop-and-brake
+    ACTION: LOOP-OVER-LIST
+    ACTION-PARAMS:
+      INPUT-LIST: <DSLE> input_list </DSLE>
+      LOOP-COUNT-VARIABLE: my_loop_count
+      LOOP-ELEMENT-VARIABLE: my_loop_element
+      DO:
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: test_var_break
+            VALUE: <DSLE> my_loop_element </DSLE>
+        - ACTION: BREAK
+          NAME: dobreak
+        - ACTION: SET-VARIABLE
+          NAME: myactionname2
+          ACTION-PARAMS:
+            VARIABLE-NAME: test_var_break
+            VALUE: 999.0
+
+  - NAME: loop-and-continue
+    ACTION: LOOP-OVER-LIST
+    ACTION-PARAMS:
+      INPUT-LIST: <DSLE> input_list </DSLE>
+      LOOP-COUNT-VARIABLE: my_loop_count
+      LOOP-ELEMENT-VARIABLE: my_loop_element
+      DO:
+        - ACTION: SET-VARIABLE
+          NAME: settestvarcont
+          ACTION-PARAMS:
+            VARIABLE-NAME: test_var_continue
+            VALUE: a
+        - ACTION: CONDITIONAL
+          NAME: cond
+          ACTION-PARAMS:
+            CASES:
+              - IF: <DSLE> my_loop_count > 1 </DSLE>
+                DO:
+                  - ACTION: CONTINUE
+                    NAME: cont
+        # This action should not be executed when my_loop_count > 1
+        - ACTION: SET-VARIABLE
+          NAME: settestvarcont
+          ACTION-PARAMS:
+            VARIABLE-NAME: test_var_continue
+            VALUE: b
+

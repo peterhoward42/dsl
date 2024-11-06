@@ -1,0 +1,45 @@
+TITLE: Illustrates QUERY ACTION
+
+MODULE-INPUTS:
+
+VARS:
+  qry_result: JSON QUERY-RESULT
+  country_code: INT
+  my_list: LIST INT
+  string_with_slashes: STRING
+  json: JSON
+
+RULES:
+  - NAME: query-example
+    ACTION: DO-MULTIPLE-ACTIONS
+    ACTION-PARAMS:
+      DO:
+        # Set up the variables the "get-regions-for-country"
+        - ACTION: SET-VARIABLE
+          NAME: setcc
+          ACTION-PARAMS:
+            VARIABLE-NAME: country_code
+            VALUE: 42
+        - ACTION: SET-VARIABLE
+          NAME: setlist
+          ACTION-PARAMS:
+            VARIABLE-NAME: my_list
+            VALUE: <DSLE> [1,2,3] </DSLE>
+        - ACTION: SET-VARIABLE
+          NAME: setstr
+          ACTION-PARAMS:
+            VARIABLE-NAME: string_with_slashes
+            VALUE: \\test\1\2
+        - ACTION: SET-VARIABLE
+          NAME: setjson
+          ACTION-PARAMS:
+            VARIABLE-NAME: json
+            VALUE: 
+              attr1: ok
+
+        # Launch the query.
+        - ACTION: QUERY
+          NAME: myactionname
+          ACTION-PARAMS:
+            NAME: get-regions-for-country
+            VARIABLE-FOR-RESULTS: qry_result

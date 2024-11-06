@@ -1,0 +1,80 @@
+TITLE: Illustrate LOOP-N-TIMES ACTION
+
+MODULE-INPUTS:
+
+
+VARS:
+  growing_result: LIST INT
+  growing_result_break: LIST INT
+  growing_result_continue: LIST INT
+  second_do_item: INT
+  my_loop_count: INT
+  test_var_continue: STRING
+
+RULES:
+  - NAME: do-something-3-times
+    ACTION: LOOP-NTIMES
+    ACTION-PARAMS:
+      NUMBER-OF-TIMES: 3
+      LOOP-COUNT-VARIABLE: my_loop_count
+      DO:
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: growing_result
+            VALUE: <DSLE> AppendInt(growing_result, my_loop_count) </DSLE>
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: second_do_item
+            VALUE: 42
+
+  - NAME: do-something-and-brake
+    ACTION: LOOP-NTIMES
+    ACTION-PARAMS:
+      NUMBER-OF-TIMES: 3
+      LOOP-COUNT-VARIABLE: my_loop_count
+      DO:
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: growing_result_break
+            VALUE: <DSLE> AppendInt(growing_result_break, my_loop_count) </DSLE>
+        - ACTION: BREAK
+          NAME: dobreak
+        - ACTION: SET-VARIABLE
+          NAME: myactionname2
+          ACTION-PARAMS:
+            VARIABLE-NAME: growing_result_break
+            VALUE: <DSLE> AppendInt(growing_result_break, my_loop_count) </DSLE>
+
+  - NAME: do-something-and-continue
+    ACTION: LOOP-NTIMES
+    ACTION-PARAMS:
+      NUMBER-OF-TIMES: 3
+      LOOP-COUNT-VARIABLE: my_loop_count
+      DO:
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: growing_result_continue
+            VALUE: <DSLE> AppendInt(growing_result_continue, my_loop_count) </DSLE>
+        - ACTION: SET-VARIABLE
+          NAME: settestvarcont
+          ACTION-PARAMS:
+            VARIABLE-NAME: test_var_continue
+            VALUE: a
+        - ACTION: CONDITIONAL
+          NAME: cond
+          ACTION-PARAMS:
+            CASES:
+              - IF: <DSLE> my_loop_count > 1 </DSLE>
+                DO:
+                  - ACTION: CONTINUE
+                    NAME: cont
+        # This action should not be executed when my_loop_count > 1
+        - ACTION: SET-VARIABLE
+          NAME: settestvarcont
+          ACTION-PARAMS:
+            VARIABLE-NAME: test_var_continue
+            VALUE: b

@@ -1,0 +1,29 @@
+TITLE: Illustrate how payloads still work if the input yaml is in a legacy format
+  
+MODULE-INPUTS:
+  some_integer: INT
+
+VARS:
+  postProcessedVariable: INT
+
+RULES:  
+  - ACTION: RUN-SCRIPT-ASYNC
+    NAME: myAsyncActionName
+    ACTION-PARAMS:
+      SCRIPT-TYPE: ANSIBLE
+      SCRIPT-NAME: Create Share
+      RUN-ON-TEST-RUNNER: true
+
+      # Note the RUNNER-TAGS parameter is commented out - and thus is missing
+      # from the parser's point of view.
+      #RUNNER-TAGS: <DSLE>["tagApple", "tagPear"]</DSLE>
+
+      SCRIPT-PAYLOAD:
+        - KEY: hostname
+          VALUE: <DSLE>"my" + "host"</DSLE>
+      POST-PROCESSING:
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: postProcessedVariable
+            VALUE: 42

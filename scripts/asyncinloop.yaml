@@ -1,0 +1,53 @@
+TITLE: Illustrate error if use Async Action in a Loop
+
+MODULE-INPUTS:
+
+
+VARS:
+  ii: INT
+  jj: INT
+  foo: INT
+  post_pro_1: STRING
+
+RULES:
+  - NAME: nested loop example
+    ACTION: LOOP-NTIMES
+    ACTION-PARAMS:
+      NUMBER-OF-TIMES: 3
+      LOOP-COUNT-VARIABLE: ii
+      DO:
+        - ACTION: LOOP-NTIMES
+          NAME: myactionname
+          ACTION-PARAMS:
+            NUMBER-OF-TIMES: <DSLE> 2 + 2 </DSLE>
+            LOOP-COUNT-VARIABLE: jj
+            DO:
+              - ACTION: DO-MULTIPLE-ACTIONS
+                NAME: myactionname
+                ACTION-PARAMS:
+                  DO: 
+                    - ACTION: SET-VARIABLE
+                      NAME: myactionname
+                      ACTION-PARAMS:
+                        VARIABLE-NAME: foo
+                        VALUE: 42
+                    - ACTION: RUN-SCRIPT-ASYNC
+                      NAME: myactionname
+                      ACTION-PARAMS:
+                        unused: bar
+                        SCRIPT-TYPE: ANSIBLE
+                        SCRIPT-NAME: Create Share
+                        RUN-ON-TEST-RUNNER: true
+                        RUNNER-TAGS: <DSLE>["tagApple", "tagPear"]</DSLE>
+                        SCRIPT-PAYLOAD:
+                          - KEY: hostname
+                            VALUE: <DSLE>"thehost"</DSLE>
+                          - KEY: vserver
+                            VALUE: <DSLE>"myserver"</DSLE>
+                        POST-PROCESSING:
+                          - ACTION: SET-VARIABLE
+                            NAME: myactionname
+                            ACTION-PARAMS:
+                              VARIABLE-NAME: post_pro_1
+                              VALUE: <DSLE> "Y" </DSLE>
+

@@ -1,0 +1,33 @@
+TITLE: Using multiline expressions.
+
+MODULE-INPUTS:
+
+VARS:
+  testJson: JSON
+  testCond: STRING
+
+RULES:
+  - NAME: Test set variable
+    ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: testJson
+      VALUE: |
+        <DSLE> {
+          "key1": "val1",
+          "key2": true,
+          "key3": 3,
+        } </DSLE>
+
+  - NAME: Test condition
+    ACTION: CONDITIONAL
+    ACTION-PARAMS:
+      CASES:
+        - IF: |
+            <DSLE> false 
+              || true </DSLE>
+          DO:
+            - ACTION: SET-VARIABLE
+              NAME: fifthCase
+              ACTION-PARAMS:
+                VARIABLE-NAME: testCond
+                VALUE: ok

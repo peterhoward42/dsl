@@ -1,0 +1,23 @@
+TITLE: Illustrate DO-MULTIPLE-ACTIONS
+
+MODULE-INPUTS:
+
+
+VARS:
+  growing_string: STRING
+
+RULES:
+  - NAME: do-multiple-actions
+    ACTION: DO-MULTIPLE-ACTIONS
+    ACTION-PARAMS:
+      DO:
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: growing_string
+            VALUE: "abcdef"
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: growing_string
+            VALUE: <DSLE> growing_string + "ghijkl" </DSLE>

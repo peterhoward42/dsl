@@ -1,0 +1,88 @@
+TITLE: Illustrate a demo ASYNC Action
+
+MODULE-INPUTS:
+
+VARS:
+  primary1: STRING
+  primary2: STRING
+  secondary1: STRING
+  secondary2: STRING
+  tertiary1: STRING
+  tertiary2: STRING
+  post_pro_1: STRING
+  post_pro_2: STRING
+
+RULES:
+  - NAME: foo
+    ACTION: DO-MULTIPLE-ACTIONS # Primary
+    ACTION-PARAMS:
+      DO:
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: primary1
+            VALUE: X
+
+        - ACTION: DO-MULTIPLE-ACTIONS # Secondary
+          NAME: myactionname
+          ACTION-PARAMS:
+            DO:
+              - ACTION: SET-VARIABLE
+                NAME: myactionname
+                ACTION-PARAMS:
+                  VARIABLE-NAME: secondary1
+                  VALUE: X
+              - ACTION: DO-MULTIPLE-ACTIONS # Tertiary
+                NAME: myactionname
+                ACTION-PARAMS:
+                  DO:
+                    - ACTION: SET-VARIABLE
+                      NAME: myactionname
+                      ACTION-PARAMS:
+                        VARIABLE-NAME: tertiary1
+                        VALUE: X
+
+                    - ACTION: RUN-SCRIPT-ASYNC
+                      NAME: myAsyncActionName
+                      ACTION-PARAMS:
+                        unused: foo
+                        SCRIPT-TYPE: ANSIBLE
+                        SCRIPT-NAME: Create Share
+                        RUN-ON-TEST-RUNNER: true
+                        RUNNER-TAGS: <DSLE>["tagApple", "tagPear"]</DSLE>
+                        SCRIPT-PAYLOAD:
+                          - KEY: hostname
+                            VALUE: <DSLE>"my" + "host"</DSLE>
+                          - KEY: vserver
+                            VALUE: myserver
+                        POST-PROCESSING:
+                          - ACTION: SET-VARIABLE
+                            NAME: myactionname
+                            ACTION-PARAMS:
+                              VARIABLE-NAME: post_pro_1
+                              VALUE: <DSLE> "Y" </DSLE>
+                          - ACTION: SET-VARIABLE
+                            NAME: myactionname
+                            ACTION-PARAMS:
+                              VARIABLE-NAME: post_pro_2
+                              VALUE: <DSLE> "Y" </DSLE>
+
+                    # Everything beyond this point is unreachable.
+                    # They are here in the script to prove that the DSL
+                    # stops when it gets to an ASYNC Action.
+
+                    - ACTION: SET-VARIABLE
+                      NAME: myactionname
+                      ACTION-PARAMS:
+                        VARIABLE-NAME: tertiary2
+                        VALUE: X
+              - ACTION: SET-VARIABLE
+                NAME: myactionname
+                ACTION-PARAMS:
+                  VARIABLE-NAME: secondary2
+                  VALUE: X
+        - ACTION: SET-VARIABLE
+          NAME: myactionname
+          ACTION-PARAMS:
+            VARIABLE-NAME: primary2
+            VALUE: X

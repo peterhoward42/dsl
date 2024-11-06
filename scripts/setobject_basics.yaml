@@ -1,0 +1,32 @@
+TITLE: Illustrate SET-OBJECT
+  
+MODULE-INPUTS:
+
+VARS:
+  a_person: JSON
+
+RULES: 
+  - NAME: set_and_mutate_a_json_variable_the_basics
+    ACTION: DO-MULTIPLE-ACTIONS
+    ACTION-PARAMS:
+      DO:
+      - ACTION: SET-VARIABLE
+        NAME: myactionname
+        ACTION-PARAMS:
+          VARIABLE-NAME: a_person
+          VALUE: |
+            <DSLE> {"name":{"first":"Janet","last":"Prichard"},"age":47, "knows": ["mary", "jane", "laura"]} </DSLE>
+      - ACTION: SET-OBJECT
+        NAME: myactionname
+        ACTION-PARAMS:
+          VARIABLE-NAME: a_person
+          PATH-LIST:
+          - PATH: name.last #  Here we use a dot to key into JSON dictionaries
+            VALUE: <DSLE> "Ander" + "son" </DSLE> # Examle of using expressions in DSLE
+          - PATH: age
+            VALUE: 48
+          - PATH: knows.2 # This is how you overwrite item[i] in a JSON list
+            VALUE: beth
+          - PATH: knows.-1 # This is how you add something to the end of a JSON list
+            VALUE: rose
+    

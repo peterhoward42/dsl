@@ -1,0 +1,32 @@
+TITLE: Illustrate SET-OBJECT with an expression in the PATH
+  
+MODULE-INPUTS:
+
+VARS:
+  a_person: JSON
+  my_list_index_var: INT
+
+RULES: 
+  - NAME: set_and_mutate_a_json_variable_using_expr_for_a_field_in_path
+    ACTION: DO-MULTIPLE-ACTIONS
+    ACTION-PARAMS:
+      DO:
+      - ACTION: SET-VARIABLE
+        NAME: myactionname
+        ACTION-PARAMS:
+          VARIABLE-NAME: a_person
+          VALUE: |
+            <DSLE> {"name":{"first":"Janet","last":"Prichard"},"age":47, "knows": ["mary", "jane", "laura"]} </DSLE>
+      - ACTION: SET-VARIABLE
+        NAME: myactionname
+        ACTION-PARAMS:
+          VARIABLE-NAME: my_list_index_var
+          VALUE: 1
+      - ACTION: SET-OBJECT
+        NAME: myactionname
+        ACTION-PARAMS:
+          VARIABLE-NAME: a_person
+          PATH-LIST:
+          - PATH: <DSLE> "name." + "la" + "st" </DSLE>  # Using an expression for an object key.
+            VALUE: Anderson
+    

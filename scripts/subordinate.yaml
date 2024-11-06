@@ -1,0 +1,22 @@
+TITLE: Illustrate SUBORDINATE WORKFLOW ACTION
+
+MODULE-INPUTS:
+  some_integer: INT
+
+VARS:
+  varname1: STRING
+  varname2: INT
+  outvarname: CUSTOMC
+
+RULES:
+  - NAME: subordinate-example
+    ACTION: SUBORDINATE-WORKFLOW
+    ACTION-PARAMS:
+      WORKFLOW_ID: uuid
+      WORKFLOW_VERSION: 4
+      INPUT_VARIABLES:
+        - NAME: name
+          VARIABLE: varname1
+        - NAME: age
+          VARIABLE: varname2
+      OUTPUT_VARIABLE: outvarname

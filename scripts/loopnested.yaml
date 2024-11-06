@@ -1,0 +1,86 @@
+TITLE: Illustrate nested loop
+
+MODULE-INPUTS:
+
+
+VARS:
+  iii: INT
+  jjj: INT
+  growing_result: LIST INT
+  nlbreak: INT
+  nlcontinner: INT
+  nlcontouter: INT
+
+RULES:
+  - NAME: nested loop example
+    ACTION: LOOP-NTIMES
+    ACTION-PARAMS:
+      NUMBER-OF-TIMES: 3
+      LOOP-COUNT-VARIABLE: iii
+      DO:
+        - ACTION: LOOP-NTIMES
+          NAME: myactionname
+          ACTION-PARAMS:
+            NUMBER-OF-TIMES: 4
+            LOOP-COUNT-VARIABLE: jjj
+            DO:
+              - ACTION: SET-VARIABLE
+                NAME: myactionname
+                ACTION-PARAMS:
+                  VARIABLE-NAME: growing_result
+                  VALUE: <DSLE> AppendInt(growing_result, iii * 1000 + jjj) </DSLE>
+
+  - NAME: nested loop with break
+    ACTION: LOOP-NTIMES
+    ACTION-PARAMS:
+      NUMBER-OF-TIMES: 3
+      LOOP-COUNT-VARIABLE: iii
+      DO:
+        - ACTION: LOOP-NTIMES
+          NAME: bl1
+          ACTION-PARAMS:
+            NUMBER-OF-TIMES: 4
+            LOOP-COUNT-VARIABLE: jjj
+            DO:
+              - ACTION: SET-VARIABLE
+                NAME: bl1sv
+                ACTION-PARAMS:
+                  VARIABLE-NAME: nlbreak
+                  VALUE: <DSLE> iii </DSLE>
+              - ACTION: BREAK
+                NAME: bl1break
+              - ACTION: SET-VARIABLE
+                NAME: bl1sv2
+                ACTION-PARAMS:
+                  VARIABLE-NAME: nlbreak
+                  VALUE: <DSLE> 999 </DSLE>
+
+  - NAME: nested loop with continue
+    ACTION: LOOP-NTIMES
+    ACTION-PARAMS:
+      NUMBER-OF-TIMES: 3
+      LOOP-COUNT-VARIABLE: iii
+      DO:
+        - ACTION: LOOP-NTIMES
+          NAME: cl1
+          ACTION-PARAMS:
+            NUMBER-OF-TIMES: 4
+            LOOP-COUNT-VARIABLE: jjj
+            DO:
+              - ACTION: SET-VARIABLE
+                NAME: cl1sv2
+                ACTION-PARAMS:
+                  VARIABLE-NAME: nlcontinner
+                  VALUE: <DSLE> iii + jjj </DSLE>
+              - ACTION: CONTINUE
+                NAME: cl1break
+              - ACTION: SET-VARIABLE
+                NAME: cl1sv3
+                ACTION-PARAMS:
+                  VARIABLE-NAME: nlcontinner
+                  VALUE: <DSLE> 999 </DSLE>
+        - ACTION: SET-VARIABLE
+          NAME: cl1sv1
+          ACTION-PARAMS:
+            VARIABLE-NAME: nlcontouter
+            VALUE: <DSLE> iii </DSLE>

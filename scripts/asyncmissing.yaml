@@ -1,0 +1,14 @@
+TITLE: Illustrate a Decision mode run with no AsyncAction
+  
+MODULE-INPUTS:
+
+
+VARS:
+  foo: int
+
+RULES:  
+  - NAME: my-rule
+  - ACTION: SET-VARIABLE
+    ACTION-PARAMS:
+      VARIABLE-NAME: foo
+      VALUE: <DSLE> 42 </DSLE>

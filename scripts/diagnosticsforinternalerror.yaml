@@ -1,0 +1,28 @@
+TITLE: Illustrate diagnostics for an internal setVariableWithoutError
+
+# This YAML creates a situation in which one of the Actions (not the first),
+# causes an internal error.
+
+MODULE-INPUTS:
+
+VARS:
+  my_var: INT
+
+RULES:
+  -  ACTION: SET-VARIABLE
+     NAME: setVariableWithoutError
+     ACTION-PARAMS:
+        VARIABLE-NAME: my_var
+        VALUE: 123
+
+  -  ACTION: SET-VARIABLE
+     NAME: setVariableCausingError
+     ACTION-PARAMS:
+        VARIABLE-NAME: my_var
+        VALUE: <DSLE> 3 / 0 </DSLE>
+
+  -  ACTION: SET-VARIABLE
+     NAME: shouldNeverBeReached
+     ACTION-PARAMS:
+        VARIABLE-NAME: my_var
+        VALUE: 456
